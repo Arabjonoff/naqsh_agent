@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:naqsh_agent/src/router/routers.dart';
 import 'package:naqsh_agent/src/ui/language/language_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
+  final _route = RouterGenerator();
+
 
   // This widget is the root of your application.
   @override
@@ -17,7 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LanguageScreen(),
+      initialRoute: '/',
+      onGenerateRoute: _route.onGenerator,
     );
   }
 }
