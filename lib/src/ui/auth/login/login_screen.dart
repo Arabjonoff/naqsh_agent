@@ -8,12 +8,12 @@ import '../../../utils/phone_number_format.dart';
 import '../../../utils/utils.dart';
 import '../../../widget/button/ontap_widget.dart';
 
-final PhoneNumberTextInputFormatter _phoneNumber =
-    PhoneNumberTextInputFormatter();
+
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
+   LoginScreen({Key? key}) : super(key: key);
+  final PhoneNumberTextInputFormatter _phoneNumber =
+  PhoneNumberTextInputFormatter();
   @override
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: SvgPicture.asset('assets/icons/vvv.svg'),
+            child: SvgPicture.asset('assets/icons/vvv.svg',fit: BoxFit.cover),
           ),
           SafeArea(
             child: SizedBox(
@@ -117,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 14 * w),
                         ),
                         GestureDetector(
-                            onTap: () {},
+                            onTap: () => Navigator.pushNamed(context, '/register'),
                             child: Text(
                               ' Ro‘yxatdan o‘ting',
                               style: TextStyle(

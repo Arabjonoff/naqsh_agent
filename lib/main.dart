@@ -4,11 +4,11 @@ import 'package:naqsh_agent/src/ui/language/language_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  runApp( MyApp());
+  runApp(NaqshApp());
 }
 
-class MyApp extends StatelessWidget {
-   MyApp({super.key});
+class NaqshApp extends StatelessWidget {
+   NaqshApp({super.key});
   final _route = RouterGenerator();
 
 

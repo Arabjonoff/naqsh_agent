@@ -38,7 +38,7 @@ class VerficationScreen extends StatelessWidget {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: SvgPicture.asset('assets/icons/vvv.svg'),
+            child: SvgPicture.asset('assets/icons/vvv.svg',fit: BoxFit.cover),
           ),
           SafeArea(
             child: SizedBox(
@@ -105,7 +105,7 @@ class VerficationScreen extends StatelessWidget {
                     SizedBox(height: 50*w,),
                     OnTapWidget(
                       title: 'Davom etish',
-                      onTap: () => Navigator.pushNamed(context, '/login'),
+                      onTap: () => Navigator.pushNamed(context, '/bottomMenu'),
                     ),
                   ],
                 ),

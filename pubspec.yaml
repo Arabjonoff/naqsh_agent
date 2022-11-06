@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^1.1.6
   pinput: ^2.2.16
+  wheel_chooser: ^1.0.0
+  syncfusion_flutter_datepicker: ^20.3.52
 
 dev_dependencies:
   flutter_test:
