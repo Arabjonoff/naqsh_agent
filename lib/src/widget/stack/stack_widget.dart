@@ -61,9 +61,9 @@ class StackWidget extends StatelessWidget {
               mainAxisSpacing: 14,
               crossAxisCount: 2,
             children: [
-              MenuCardWidget(image: 'assets/icons/purse.png', onTap: () { Navigator.pushNamed(context, '/wallet'); }, margin: EdgeInsets.only(left: 20*w),),
+              MenuCardWidget(image: 'assets/icons/purse.png', onTap: () => Navigator.pushNamed(context, '/wallet'), margin: EdgeInsets.only(left: 20*w),),
               MenuCardWidget(image: 'assets/icons/agent.png', onTap: () {  }, margin: EdgeInsets.only(right: 20*w),),
-              MenuCardWidget(image: 'assets/icons/download.png', onTap: () {  }, margin: EdgeInsets.only(left: 20*w),),
+              MenuCardWidget(image: 'assets/icons/download.png', onTap: () => Navigator.pushNamed(context, '/income') , margin: EdgeInsets.only(left: 20*w),),
               MenuCardWidget(image: 'assets/icons/upload.png', onTap: () {  }, margin: EdgeInsets.only(right: 20*w),),
               MenuCardWidget(image: 'assets/icons/calculator.png', onTap: () {  }, margin: EdgeInsets.only(left: 20*w),),
             ],)
