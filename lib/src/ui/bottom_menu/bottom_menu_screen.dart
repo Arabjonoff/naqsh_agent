@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
 import 'package:naqsh_agent/src/ui/bottom_menu/home/home_screen.dart';
+import 'package:naqsh_agent/src/ui/debt/debt_screen.dart';
 import 'package:naqsh_agent/src/ui/income/income_screen.dart';
+
+import '../expense/expense_screen.dart';
 
 class BottomMenuScreen extends StatefulWidget {
   const BottomMenuScreen({Key? key}) : super(key: key);
@@ -35,10 +38,10 @@ class _BottomMenuScreenState extends State<BottomMenuScreen> {
       ),
       body: [
         HomeScreen(),
-        HomeScreen(),
+        ExpenseScreen(),
         HomeScreen(),
         IncomeScreen(),
-        HomeScreen(),
+        DebtScreen(),
       ][_selectedIndex],
     );
   }

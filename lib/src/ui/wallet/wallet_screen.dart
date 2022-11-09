@@ -18,33 +18,40 @@ class _WalletScreenState extends State<WalletScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 5,
-        automaticallyImplyLeading: false,
+        foregroundColor: AppTheme.black24,
         backgroundColor: AppTheme.white,
-        leading: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: NavigatorPop(context),
-        ),
         centerTitle: true,
-        title:const Text('Hamyonlar',style: TextStyle(fontSize: 30,fontWeight: FontWeight.w700,color: Colors.black),),
-        shape:  const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20))
+        title: const Text(
+          'Hamyonlar',
+          style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.w700, color: Colors.black),
         ),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20))),
       ),
       backgroundColor: AppTheme.background,
       body: Column(
         children: [
-          Expanded(child: Column(
-            children: [
-              SizedBox(height: 20,),
-              WalletCardWidget(onTap: ()=>Navigator.pushNamed(context, '/wallet_history'),),
-              WalletCardWidget(onTap: () {  },),
-              WalletCardWidget(onTap: () {  },),
-            ],
-          ),),
-          OnTapWidget(title: 'Hamyon qo‘shish', onTap: (){
-            AddWalletDialog.showAddWalletDialog(context);
-          }),
-          SizedBox(height: 32,)
+          Expanded(
+            child: ListView.builder(
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return WalletCardWidget(
+                  onTap: () => Navigator.pushNamed(context, '/wallet_history'),
+                );
+              },
+            ),
+          ),
+          OnTapWidget(
+              title: 'Hamyon qo‘shish',
+              onTap: () {
+                AddWalletDialog.showAddWalletDialog(context);
+              }),
+          SizedBox(
+            height: 32,
+          )
         ],
       ),
     );

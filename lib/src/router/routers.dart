@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:naqsh_agent/src/ui/agent/agent_screen.dart';
 import 'package:naqsh_agent/src/ui/auth/register/register_screen.dart';
 import 'package:naqsh_agent/src/ui/auth/verification/verfication_screen.dart';
 import 'package:naqsh_agent/src/ui/bottom_menu/bottom_menu_screen.dart';
+import 'package:naqsh_agent/src/ui/debt/debt_screen.dart';
+import 'package:naqsh_agent/src/ui/expense/expense_screen.dart';
 import 'package:naqsh_agent/src/ui/income/income_screen.dart';
 import 'package:naqsh_agent/src/ui/language/onboarding/onboarding_screen.dart';
 import 'package:naqsh_agent/src/ui/wallet/wallet_history/wallet_history_screen.dart';
@@ -40,6 +43,15 @@ class RouterGenerator {
 
       case '/income':
         return _navigate(const IncomeScreen());
+
+      case '/debt':
+        return _navigate(const DebtScreen());
+
+      case '/expense':
+        return _navigate(const ExpenseScreen());
+
+      case '/agent':
+        return _navigate(const AgentScreen());
     }
   }
 }

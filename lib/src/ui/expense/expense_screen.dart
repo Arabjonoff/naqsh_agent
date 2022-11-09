@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:naqsh_agent/src/dialog/add_agent/add_agent_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../../dialog/add_agent/add_agent_dialog.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/utils.dart';
 import '../../widget/button/ontap_widget.dart';
-import '../../widget/pop/pop_widget.dart';
 
-class IncomeScreen extends StatefulWidget {
-  const IncomeScreen({Key? key}) : super(key: key);
+class ExpenseScreen extends StatefulWidget {
+  const ExpenseScreen({Key? key}) : super(key: key);
 
   @override
-  State<IncomeScreen> createState() => _IncomeScreenState();
+  State<ExpenseScreen> createState() => _ExpenseScreenState();
 }
 
-class _IncomeScreenState extends State<IncomeScreen> {
+class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     double h = Utils.getHeight(context);
     double w = Utils.getWidth(context);
     return Scaffold(
-      backgroundColor: AppTheme.income,
+      backgroundColor: AppTheme.expense,
       endDrawer: Drawer(
         backgroundColor: AppTheme.background,
         child: Column(
@@ -74,82 +73,82 @@ class _IncomeScreenState extends State<IncomeScreen> {
           ),
         ],
         centerTitle: true,
-        title:const Text('Kirimlar',style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: Colors.black),),
+        title:const Text('Harajatlar',style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: Colors.black),),
         shape:  const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20))
         ),
       ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (context,index){
-                    return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20*h,horizontal: 20*h),
-                      margin: EdgeInsets.symmetric(horizontal: 20*w,vertical: 10),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: AppTheme.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(4,15),
-                            blurRadius: 15,
-                            color: Color.fromRGBO(0, 0, 0, 0.1),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          span('Ismi:', 'Jorch Burch'),
-                          span('Hamyon nomi:', 'Plastik USD'),
-                          span('Sana:', '20.10.2022   20:10'),
-                          span('Valyuta:', 'USD'),
-                          Row(
-                            children: [
-                              Text('Naqd:',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),),
-                              const SizedBox(width: 20,),
-                              Text('+\$120',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  }),
-            ),
-            Container(
-              decoration: const BoxDecoration(
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                itemCount: 6,
+                itemBuilder: (context,index){
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 20*h,horizontal: 20*h),
+                    margin: EdgeInsets.symmetric(horizontal: 20*w,vertical: 10),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppTheme.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(4,15),
+                          blurRadius: 15,
+                          color: Color.fromRGBO(0, 0, 0, 0.1),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        span('Ismi:', 'Jorch Burch'),
+                        span('Hamyon nomi:', 'Plastik USD'),
+                        span('Sana:', '20.10.2022   20:10'),
+                        span('Valyuta:', 'USD'),
+                        Row(
+                          children: [
+                            Text('Naqd:',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),),
+                            const SizedBox(width: 20,),
+                            Text('+\$120',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                }),
+          ),
+          Container(
+            decoration: const BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    offset: Offset(-4, 15),
-                    blurRadius: 15,
-                    color: Color.fromRGBO(0, 0, 0, 0.1)
+                      offset: Offset(-4, 15),
+                      blurRadius: 15,
+                      color: Color.fromRGBO(0, 0, 0, 0.1)
                   )
                 ],
                 color: AppTheme.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
-              ),
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Umumiy:',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18*h),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('5 235 650.00UZS',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18*h)),
-                    ),
-                  ],
-                ),
+            ),
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Umumiy:',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18*h),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('5 235 650.00UZS',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18*h)),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 38.0),
         child: FloatingActionButton(onPressed: () =>ShowAddAgentDialog.showAddAgentDialog(context),backgroundColor: AppTheme.purple,child: const Icon(Icons.add),),

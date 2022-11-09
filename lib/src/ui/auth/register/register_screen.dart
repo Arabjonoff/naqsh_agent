@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:naqsh_agent/src/widget/textfield/textfield_widget.dart';
 
 import '../../../theme/app_theme.dart';
 import '../../../utils/phone_number_format.dart';
@@ -12,8 +13,8 @@ import '../../../widget/pop/pop_widget.dart';
 
 class RegisterScreen extends StatelessWidget {
    RegisterScreen({Key? key}) : super(key: key);
-  final PhoneNumberTextInputFormatter _phoneNumber =
-  PhoneNumberTextInputFormatter();
+  final PhoneNumberTextInputFormatter _phoneNumber = PhoneNumberTextInputFormatter();
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -58,64 +59,9 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 20 * w),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: AppTheme.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(0, 4),
-                              color: Color.fromRGBO(255, 255, 255, 0.1))
-                        ]),
-                    child: Row(
-                      children: [
-                   Padding(
-                     padding:  EdgeInsets.symmetric(horizontal: 15.0*w,vertical: 10),
-                     child: SvgPicture.asset('assets/icons/profile.svg',color: const Color(0xFF000000),),
-                   ),
-                        Expanded(
-                          child: TextFormField(
-                            style: TextStyle(fontSize: 18 * w),
-                            decoration: const InputDecoration(
-                              hintText: 'Ism',
-                                border: InputBorder.none),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 20 * w, vertical: 20 * h),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: AppTheme.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(0, 4),
-                              color: Color.fromRGBO(255, 255, 255, 0.1))
-                        ]),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 15.0*w,vertical: 10),
-                          child: SvgPicture.asset('assets/icons/profile.svg',color: const Color(0xFF000000)),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            style: TextStyle(fontSize: 18 * w),
-                            decoration: const InputDecoration(
-                                hintText: 'Familya',
-                                border: InputBorder.none),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  TextFieldWidget(controller: controller, icon: 'assets/icons/profile.svg', hint: 'Ism'),
+                  TextFieldWidget(controller: controller, icon: 'assets/icons/profile.svg', hint: 'Familya'),
+                  SizedBox(height: 10*w,),
                   Container(
                     margin: EdgeInsets.symmetric(
                         horizontal: 20 * w,),

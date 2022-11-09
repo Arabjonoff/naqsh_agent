@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:naqsh_agent/src/widget/button/ontap_widget.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../../../theme/app_theme.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/pop/pop_widget.dart';
+import '../../dialog/add_agent/add_agent_dialog.dart';
+import '../../theme/app_theme.dart';
+import '../../utils/utils.dart';
+import '../../widget/button/ontap_widget.dart';
 
-class WalletHistoryScreen extends StatefulWidget {
-  const WalletHistoryScreen({Key? key}) : super(key: key);
+class AgentScreen extends StatefulWidget {
+  const AgentScreen({Key? key}) : super(key: key);
 
   @override
-  State<WalletHistoryScreen> createState() => _WalletHistoryScreenState();
+  State<AgentScreen> createState() => _AgentScreenState();
 }
 
-class _WalletHistoryScreenState extends State<WalletHistoryScreen>  with TickerProviderStateMixin{
+class _AgentScreenState extends State<AgentScreen> {
   @override
   Widget build(BuildContext context) {
     double h = Utils.getHeight(context);
     double w = Utils.getWidth(context);
     return Scaffold(
+      backgroundColor: AppTheme.background,
       endDrawer: Drawer(
         backgroundColor: AppTheme.background,
         child: Column(
@@ -72,51 +73,52 @@ class _WalletHistoryScreenState extends State<WalletHistoryScreen>  with TickerP
           ),
         ],
         centerTitle: true,
-        title:const Text('Hamyonlar tarixi',style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: Colors.black),),
+        title:const Text('Kontr agentlar',style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: Colors.black),),
         shape:  const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20))
         ),
       ),
-      backgroundColor: AppTheme.background,
-      body: Column(children: [
-        Expanded(
-          child: ListView.builder(
-              itemCount: 6,
-              itemBuilder: (context,index){
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20*h,horizontal: 20*h),
-                  margin: EdgeInsets.symmetric(horizontal: 20*w,vertical: 10),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppTheme.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        offset: Offset(4,15),
-                        blurRadius: 15,
-                        color: Color.fromRGBO(0, 0, 0, 0.1),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      span('Ismi:', 'Jorch Burch'),
-                      span('Hamyon nomi:', 'Plastik USD'),
-                      span('Sana:', '20.10.2022   20:10'),
-                      span('Valyuta:', 'USD'),
-                      Row(
-                        children: [
-                          Text('Naqd:',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),),
-                          const SizedBox(width: 20,),
-                          Text('+\$120',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              }),
-        ),
-      ],),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                itemCount: 6,
+                itemBuilder: (context,index){
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 20*h,horizontal: 20*h),
+                    margin: EdgeInsets.symmetric(horizontal: 20*w,vertical: 10),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppTheme.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(4,15),
+                          blurRadius: 15,
+                          color: Color.fromRGBO(0, 0, 0, 0.1),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        span('Agent nomi:', 'Jorch Burch'),
+                        span('Tel raqam:', '+998 00 123 45 67'),
+                        span('Sana:', '20.10.2022   20:10'),
+                        Row(
+                          children: [
+                            Text('Qarzi:',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),),
+                            const SizedBox(width: 20,),
+                            Text('+\$120',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () =>ShowAddAgentDialog.showAddAgentDialog(context),backgroundColor: AppTheme.purple,child: const Icon(Icons.add),),
     );
   }
   Widget span(String title,content){
