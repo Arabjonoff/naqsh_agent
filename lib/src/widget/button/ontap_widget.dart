@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
+import 'package:naqsh_agent/src/utils/utils.dart';
 
 class OnTapWidget extends StatelessWidget {
   final String title;
+  bool color;
   final Function() onTap;
-  const OnTapWidget({Key? key, required this.title, required this.onTap}) : super(key: key);
+   OnTapWidget({Key? key, required this.title, required this.onTap,this.color = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: AppTheme.purple
-        ),
+    double w = Utils.getWidth(context);
+    double h = Utils.getHeight(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            backgroundColor: color? AppTheme.purple:Colors.red, // Background color
+          ),
+        // style: ButtonStyle(
+        //   backgroundColor:           color: color? AppTheme.purple:Colors.red
+        // ),
+          onPressed: onTap, child: Container(
+        padding:  EdgeInsets.symmetric(vertical: 14*w),
         width: MediaQuery.of(context).size.width,
         child: Center(
-          child: Text(title,style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: AppTheme.white),),
+          child: Text(title,style:  TextStyle(fontSize: 20*w,fontWeight: FontWeight.w600,color: AppTheme.white),),
         ),
-      ),
+      )),
     );
   }
 }

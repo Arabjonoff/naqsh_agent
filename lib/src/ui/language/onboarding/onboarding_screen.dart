@@ -16,11 +16,7 @@ class OnBoardingScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: SvgPicture.asset('assets/icons/vvv.svg'),
-          ),
+          SvgPicture.asset('assets/icons/vvv.svg',fit: BoxFit.cover,),
           SafeArea(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
@@ -35,19 +31,21 @@ class OnBoardingScreen extends StatelessWidget {
                         children: [
                           NavigatorPop(context),
                           SizedBox(width: 30*w,),
-                          Text('Hush kelibsiz !',style: TextStyle(fontSize: 30*h,fontWeight: FontWeight.w700,),),
+                          Text('Hush kelibsiz !',style: TextStyle(fontSize: 30*w,fontWeight: FontWeight.w700,),),
                         ],
                       ),
                     ),
                     SizedBox(height: 15*h,),
-                    Text('Ilovadan foydalanish uchun ro‘yxatdan o‘ting. Avval ro‘yxatdan o‘tgan bo‘lsangiz kirish tugmasiga bosing !',textAlign: TextAlign.center,style: TextStyle(fontSize: 18*h),),
+                    Text('Ilovadan foydalanish uchun ro‘yxatdan o‘ting. Avval ro‘yxatdan o‘tgan bo‘lsangiz kirish tugmasiga bosing !',textAlign: TextAlign.center,style: TextStyle(fontSize: 18*w),),
                     Padding(
                       padding:EdgeInsets.only(top: 73.0*h,bottom: 103*h),
-                      child: Image.asset('assets/icons/onboarding.png',width: 200*w,),
+                      child: Image.asset('assets/icons/onboarding.png',width: 200*h,),
                     ),
                     OnTapWidget(title: 'Kirish', onTap: ()=>Navigator.pushNamed(context, '/login'),),
                     SizedBox(height: 15*h,),
-                    TextButton(onPressed: (){}, child: Text('Ro‘yxatdan o‘tish',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20*h,color: AppTheme.black24),))
+                    TextButton(onPressed: (){
+                      Navigator.pushNamed(context, '/register');
+                    }, child: Text('Ro‘yxatdan o‘tish',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20*h,color: AppTheme.black24),))
                   ],
                 ),
               ),

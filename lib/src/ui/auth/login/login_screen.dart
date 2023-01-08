@@ -1,9 +1,13 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
 import 'package:naqsh_agent/src/widget/pop/pop_widget.dart';
 
+import '../../../model/http_result.dart';
+import '../../../model/response_model.dart';
+import '../../../provider/repository.dart';
 import '../../../utils/phone_number_format.dart';
 import '../../../utils/utils.dart';
 import '../../../widget/button/ontap_widget.dart';
@@ -14,6 +18,7 @@ class LoginScreen extends StatelessWidget {
    LoginScreen({Key? key}) : super(key: key);
   final PhoneNumberTextInputFormatter _phoneNumber =
   PhoneNumberTextInputFormatter();
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -43,10 +48,10 @@ class LoginScreen extends StatelessWidget {
                         child: Text(
                       'Kirish',
                       style: TextStyle(
-                        fontSize: 30 * h,
+                        fontSize: 30 * w,
                         fontWeight: FontWeight.w700,
                       ),
-                    )),
+                    ),),
                     Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 58.0*w),
@@ -92,10 +97,11 @@ class LoginScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                _phoneNumber,
-                              ],
+                              controller: controller,
+                              // inputFormatters: [
+                              //   FilteringTextInputFormatter.digitsOnly,
+                              //   _phoneNumber,
+                              // ],
                               maxLength: 12,
                               keyboardType: TextInputType.number,
                               style: TextStyle(fontSize: 18 * w),
@@ -107,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 366 * w,
+                      height: 366 * h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -126,10 +132,10 @@ class LoginScreen extends StatelessWidget {
                             ),),
                       ],
                     ),
-                    SizedBox(height: 50*w,),
+                    SizedBox(height: 50*h,),
                     OnTapWidget(
                       title: 'Davom etish',
-                      onTap: () => Navigator.pushNamed(context, '/verfication'),
+                      onTap: () => senData('+998${controller.text}', context),
                     ),
                   ],
                 ),
@@ -140,4 +146,29 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+   senData(phone ,context)async{
+     Repository _repository = Repository();
+     HttpResult response = await _repository.login(phone);
+     if(response.result["status"] =='ok'){
+       Navigator.pushNamed(context, '/verfication',arguments: phone);
+     }
+     else{
+       final snackBar = SnackBar(
+         /// need to set following properties for best effect of awesome_snackbar_content
+         elevation: 0,
+         backgroundColor: Colors.transparent,
+         behavior: SnackBarBehavior.floating,
+         dismissDirection: DismissDirection.down,
+         content: AwesomeSnackbarContent(
+           title: "Xatolik",
+           message: "Bu raqam avval ro'yxatdan o'tmagan",
+           contentType: ContentType.failure,
+           inMaterialBanner: false,
+         ),
+       );
+       ScaffoldMessenger.of(context)..hideCurrentMaterialBanner()..showSnackBar(snackBar);
+     }
+
+   }
+
 }

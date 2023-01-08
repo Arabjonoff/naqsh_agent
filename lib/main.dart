@@ -1,14 +1,29 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:naqsh_agent/src/router/routers.dart';
-import 'package:naqsh_agent/src/ui/language/language_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(NaqshApp());
+  await EasyLocalization.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  var token = preferences.getString('token')??"";
+  runApp(
+    EasyLocalization(
+      saveLocale: true,
+      supportedLocales: const [
+        Locale('uz'),
+        Locale('en'),
+        Locale('ru'),
+      ],
+      path: 'assets/i18n',child:  NaqshApp(token: token,),
+      startLocale: Locale('uz'),
+    ),);
 }
 
 class NaqshApp extends StatelessWidget {
-   NaqshApp({super.key});
+  final String token;
+   NaqshApp({super.key, required this.token});
   final _route = RouterGenerator();
 
 
@@ -17,12 +32,23 @@ class NaqshApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Naqsh Agent',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: token == ''?'/lang':'/bottomMenu',
+      // initialRoute:'/register',
       onGenerateRoute: _route.onGenerator,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      // home: BottomMenuScreen(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+          child: child!,
+        );
+      },
     );
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
 import 'package:naqsh_agent/src/ui/bottom_menu/home/home_screen.dart';
+import 'package:naqsh_agent/src/ui/bottom_menu/profile/profile.dart';
 import 'package:naqsh_agent/src/ui/debt/debt_screen.dart';
 import 'package:naqsh_agent/src/ui/income/income_screen.dart';
 
@@ -14,8 +17,14 @@ class BottomMenuScreen extends StatefulWidget {
   State<BottomMenuScreen> createState() => _BottomMenuScreenState();
 }
 int _selectedIndex = 2;
+// final LocalAuthentication auth = LocalAuthentication();
 
 class _BottomMenuScreenState extends State<BottomMenuScreen> {
+  @override
+  void initState() {
+// bio();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +46,40 @@ class _BottomMenuScreenState extends State<BottomMenuScreen> {
         ],
       ),
       body: [
-        HomeScreen(),
-        ExpenseScreen(),
-        HomeScreen(),
-        IncomeScreen(),
-        DebtScreen(),
+        ProfileScreen(),
+        const ExpenseScreen(),
+        const HomeScreen(),
+        const IncomeScreen(),
+        const DebtScreen(),
       ][_selectedIndex],
     );
   }
+  // bio()async{
+  //   final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+  //   final bool canAuthenticate = canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+  //
+  //   final List<BiometricType> availableBiometrics =
+  //   await auth.getAvailableBiometrics();
+  //
+  //   if (availableBiometrics.isNotEmpty) {
+  //     // Some biometrics are enrolled.
+  //   }
+  //
+  //   if (availableBiometrics.contains(BiometricType.strong) ||
+  //       availableBiometrics.contains(BiometricType.face)) {
+  //     // Specific types of biometrics are available.
+  //     // Use checks like this with caution!
+  //   }
+  //   try {
+  //     final bool didAuthenticate = await auth.authenticate(
+  //         localizedReason: 'Please authenticate to show account balance');
+  //     if(didAuthenticate == true){
+  //       Navigator.pushNamed(context, '/login');
+  //     }
+  //     // ···
+  //   } on PlatformException {
+  //     // ...
+  //   }
+  // }
+
 }

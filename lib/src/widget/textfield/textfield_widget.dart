@@ -8,22 +8,32 @@ class TextFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final String icon;
   final String hint;
+  bool enables;
+  bool type;
+  String currencyType;
+  bool currency;
+  bool horizontal;
 
-  const TextFieldWidget(
-      {Key? key,
-      required this.controller,
-      required this.icon,
-      required this.hint,})
-      : super(key: key);
+  TextFieldWidget({
+    Key? key,
+    required this.controller,
+    required this.icon,
+    required this.hint,
+    this.enables = true,
+    this.type = false,
+    this.currency = false,
+    this.horizontal = false,
+    this.currencyType = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double h = Utils.getHeight(context);
     double w = Utils.getWidth(context);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20 * w,vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: horizontal ?0:20 * w, vertical: 10),
       width: MediaQuery.of(context).size.width,
-      height: 50*w,
+      height: 50 * w,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           boxShadow: const [
@@ -35,18 +45,34 @@ class TextFieldWidget extends StatelessWidget {
           color: AppTheme.white),
       child: Row(
         children: [
-          SizedBox(width: 20*w,),
+          SizedBox(
+            width: 20 * w,
+          ),
           SvgPicture.asset(
             icon,
             height: 24 * h,
             width: 24 * h,
           ),
-          SizedBox(width: 10*w,),
+          SizedBox(
+            width: 10 * w,
+          ),
           Expanded(
             child: TextField(
+              keyboardType: type?TextInputType.number:TextInputType.text,
+              enabled: enables ? true : false,
               controller: controller,
-              decoration:
-                  InputDecoration(hintText: hint, border: InputBorder.none),
+              decoration: InputDecoration(
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(currencyType),
+                ),
+                // suffix:  currency?Padding(
+                //   padding: const EdgeInsets.only(right: 8.0),
+                //   child: Text(currencyType),
+                // ):const SizedBox(),
+                hintText: hint,
+                border: InputBorder.none,
+              ),
             ),
           )
         ],

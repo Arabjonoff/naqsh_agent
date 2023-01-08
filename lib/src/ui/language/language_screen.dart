@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../../utils/utils.dart';
 
 class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({Key? key}) : super(key: key);
+   const LanguageScreen({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +17,7 @@ class LanguageScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF3F3F4),
       body: Stack(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: SvgPicture.asset('assets/icons/vvv.svg'),
-          ),
+          SvgPicture.asset('assets/icons/vvv.svg',fit: BoxFit.cover,),
           SafeArea(
             child: Padding(
               padding:  EdgeInsets.only(top: 100*h),
@@ -29,8 +28,8 @@ class LanguageScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Hush kelibsiz !',style: TextStyle(fontSize: 30*h,fontWeight: FontWeight.w700,),),
-                      Text('O‘zingizga maqul tilni tanlang !',textAlign: TextAlign.center,style: TextStyle(fontSize: 18*h,height: 2*h),),
+                      Text('Hush kelibsiz !',style: TextStyle(fontSize: 30*w,fontWeight: FontWeight.w700,),),
+                      Text('O‘zingizga maqul tilni tanlang !',textAlign: TextAlign.center,style: TextStyle(fontSize: 18*w,height: 2*h),),
                       SizedBox(height: 120*h,),
                       GestureDetector(
                         onTap: ()=>Navigator.pushNamed(context, '/boarding'),
@@ -67,28 +66,7 @@ class LanguageScreen extends StatelessWidget {
                                 Image.asset('assets/icons/ru.png'),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('UZ',style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w600),),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20*h,),
-                      GestureDetector(
-                        child: Card(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0),),
-                          elevation: 5,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 5*h),
-                            width: 200*w,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/icons/turk.png'),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('UZ',style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w600),),
+                                  child: Text('RU',style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w600),),
                                 )
                               ],
                             ),
@@ -109,7 +87,28 @@ class LanguageScreen extends StatelessWidget {
                                 Image.asset('assets/icons/en.png'),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('UZ',style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w600),),
+                                  child: Text('ENG',style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w600),),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20*h,),
+                      GestureDetector(
+                        child: Card(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0),),
+                          elevation: 5,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 5*h),
+                            width: 200*w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/icons/turk.png'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text('TUR',style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w600),),
                                 )
                               ],
                             ),

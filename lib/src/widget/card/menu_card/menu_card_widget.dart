@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
+import 'package:naqsh_agent/src/utils/utils.dart';
 
 class MenuCardWidget extends StatelessWidget {
   final String image;
+  final String name;
   final Function() onTap;
   final EdgeInsets margin;
 
-  const MenuCardWidget({Key? key, required this.image, required this.onTap, required this.margin})
+  const MenuCardWidget({Key? key, required this.image, required this.onTap, required this.margin, required this.name,})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double h = Utils.getHeight(context);
+    double w = Utils.getWidth(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -29,14 +34,12 @@ class MenuCardWidget extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 60.0, vertical: 10.0),
-              child: Image.asset(image),
+              padding:  EdgeInsets.all(20.0*h),
+              child: Image.asset(image,width: 50*w,),
             ),
-            Text('4',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Text('Hamyonlar'),
+              padding:  EdgeInsets.symmetric(vertical: 10*h),
+              child: Text(name),
             ),
           ],
         ),

@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uz.naqshsoft.naqsh_agent">
-   <application
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
         android:label="naqsh_agent"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

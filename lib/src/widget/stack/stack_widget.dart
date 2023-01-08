@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:naqsh_agent/src/model/http_result.dart';
+import 'package:naqsh_agent/src/provider/repository.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
 import 'package:naqsh_agent/src/widget/card/banner_card/banner_card_widget.dart';
 import 'package:naqsh_agent/src/widget/card/menu_card/menu_card_widget.dart';
 
 import '../../utils/utils.dart';
 
-class StackWidget extends StatelessWidget {
-  const StackWidget({Key? key}) : super(key: key);
+class StackWidget extends StatefulWidget {
+  final num income;
+  final num debt;
+  final num expense;
+  final num incomeUsd;
+  final num debtUsd;
+  final num expenseUsd;
+  const StackWidget({Key? key, required this.income, required this.debt, required this.expense, required this.incomeUsd, required this.debtUsd, required this.expenseUsd}) : super(key: key);
 
+  @override
+  State<StackWidget> createState() => _StackWidgetState();
+}
+
+class _StackWidgetState extends State<StackWidget> {
   @override
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -15,7 +29,7 @@ class StackWidget extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: 213*w,
+          height: 213*h,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
             color: AppTheme.indigo,
@@ -28,25 +42,28 @@ class StackWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text('Oktyabr, 2022',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16*h,color: AppTheme.white),),
+                child: Text(DateFormat('MMMM-yyyy').format(DateTime.now()),style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16*w,color: AppTheme.white),),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BannerCardWidget(),
-                  BannerCardWidget(),
-                  BannerCardWidget(),
+                  SizedBox(width: 16*w,),
+                  BannerCardWidget(name: 'Kirim',summa: widget.income,summa_usd: widget.incomeUsd,),
+                  BannerCardWidget(name: 'Chiqim',summa: widget.debt,summa_usd:widget.debtUsd ,),
+                  BannerCardWidget(name: 'Xarajat',summa: widget.expense,summa_usd: widget.expenseUsd,),
+                  SizedBox(width: 16*w,),
                 ],
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 150.0),
+          padding: EdgeInsets.only(top: 150.0*h),
           child: Container(
+            padding: EdgeInsets.only(top: 24*h),
             width: MediaQuery.of(context).size.width,
-              height: 650*w,
+              height: 630*h,
               decoration: const BoxDecoration(
               color: AppTheme.background,
               borderRadius: BorderRadius.only(
@@ -55,21 +72,24 @@ class StackWidget extends StatelessWidget {
               ),
             ),
             child: GridView.count(
-              physics: const ScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisSpacing: 14,
-              childAspectRatio: 1.3*w,
+              childAspectRatio: 1.3,
               mainAxisSpacing: 14,
               crossAxisCount: 2,
             children: [
-              MenuCardWidget(image: 'assets/icons/purse.png', onTap: () => Navigator.pushNamed(context, '/wallet'), margin: EdgeInsets.only(left: 20*w),),
-              MenuCardWidget(image: 'assets/icons/agent.png', onTap: () => Navigator.pushNamed(context, '/agent'), margin: EdgeInsets.only(right: 20*w),),
-              MenuCardWidget(image: 'assets/icons/download.png', onTap: () => Navigator.pushNamed(context, '/income') , margin: EdgeInsets.only(left: 20*w),),
-              MenuCardWidget(image: 'assets/icons/upload.png', onTap: () => Navigator.pushNamed(context, '/debt'), margin: EdgeInsets.only(right: 20*w),),
-              MenuCardWidget(image: 'assets/icons/calculator.png', onTap: ()=> Navigator.pushNamed(context, '/expense'), margin: EdgeInsets.only(left: 20*w),),
+              MenuCardWidget(image: 'assets/icons/3.png', onTap: () => Navigator.pushNamed(context, '/wallet'), margin: EdgeInsets.only(left: 20*w), name: 'Hamyonlar',),
+              MenuCardWidget(image: 'assets/icons/1.png', onTap: () => Navigator.pushNamed(context, '/agent'), margin: EdgeInsets.only(right: 20*w), name: 'Agentlar', ),
+              MenuCardWidget(image: 'assets/icons/3.png', onTap: () => Navigator.pushNamed(context, '/income') , margin: EdgeInsets.only(left: 20*w), name: 'Kirim',),
+              MenuCardWidget(image: 'assets/icons/4.png', onTap: () => Navigator.pushNamed(context, '/debt',arguments: 3), margin: EdgeInsets.only(right: 20*w), name: 'Chiqim',),
+              MenuCardWidget(image: 'assets/icons/4.png', onTap: ()=> Navigator.pushNamed(context, '/expense'), margin: EdgeInsets.only(left: 20*w), name: 'Harajatlar',),
             ],)
           ),
         ),
       ],
     );
   }
+
+
+
 }
