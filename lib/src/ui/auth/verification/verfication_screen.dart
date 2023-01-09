@@ -11,12 +11,18 @@ import '../../../utils/utils.dart';
 import '../../../widget/button/ontap_widget.dart';
 import '../../../widget/pop/pop_widget.dart';
 
-class VerficationScreen extends StatelessWidget {
+class VerficationScreen extends StatefulWidget {
   final String phone;
-   VerficationScreen({Key? key, required this.phone}) : super(key: key);
+   const VerficationScreen({Key? key, required this.phone}) : super(key: key);
 
   @override
+  State<VerficationScreen> createState() => _VerficationScreenState();
+}
+
+class _VerficationScreenState extends State<VerficationScreen> {
   TextEditingController controller = TextEditingController();
+
+   bool loading = false;
 
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -49,7 +55,7 @@ class VerficationScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 58.0*w),
                         child: Text(
-                          '$phone\n Telefon raqamingizga sms kod jo‘natildi',
+                          '${widget.phone}\n Telefon raqamingizga sms kod jo‘natildi',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18 * w,
@@ -93,8 +99,9 @@ class VerficationScreen extends StatelessWidget {
                   ],
                 ),),
                 OnTapWidget(
+                  loading: loading,
                   title: 'Davom etish',
-                  onTap: () => senData("914980168", controller.text, context)
+                  onTap: () => senData(widget.phone, controller.text, context)
                 ),
                 SizedBox(height: 20,)
               ],
@@ -104,36 +111,44 @@ class VerficationScreen extends StatelessWidget {
       ),
     );
   }
+  senData(phone ,code,context)async{
+    setState(() => loading = true);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Repository _repository = Repository();
+    HttpResult response = await _repository.activate(phone,code);
+    print(code);
+    if(response.result["status"] =="ok"){
+      var y = response.result["register_date"];
+      var m = response.result["register_date"];
+      preferences.setInt('year', int.parse(y.substring(0,4)));
+      preferences.setInt('month', int.parse(m.substring(5,6)));
+      setState(() => loading = false);
+      preferences.setString('token', response.result["token"].toString());
+      Navigator.pushNamed(context, '/bottomMenu',);
+      // Navigator.pushNamed(context, '/verfication',arguments: phone);
+    }
+    else{
+      setState(() => loading = false);
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
+        dismissDirection: DismissDirection.down,
+        content: AwesomeSnackbarContent(
+          title: "Xatolik",
+          message: "Ko'd noto'g'ri tekshirib qayta kiriting",
+          contentType: ContentType.failure,
+          inMaterialBanner: false,
+        ),
+      );
+      ScaffoldMessenger.of(context)..hideCurrentMaterialBanner()..showSnackBar(snackBar);
+    }
+
+  }
 }
 
-senData(phone ,code,context)async{
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  Repository _repository = Repository();
-  HttpResult response = await _repository.activate("+998"+phone,code);
-  print(code);
-  if(response.result["status"] =="ok"){
-    preferences.setString('token', response.result["token"].toString());
-    Navigator.pushNamed(context, '/bottomMenu',);
-    // Navigator.pushNamed(context, '/verfication',arguments: phone);
-  }
-  else{
-    final snackBar = SnackBar(
-      /// need to set following properties for best effect of awesome_snackbar_content
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      behavior: SnackBarBehavior.floating,
-      dismissDirection: DismissDirection.down,
-      content: AwesomeSnackbarContent(
-        title: "Xatolik",
-        message: "Ko'd noto'g'ri tekshirib qayta kiriting",
-        contentType: ContentType.failure,
-        inMaterialBanner: false,
-      ),
-    );
-    ScaffoldMessenger.of(context)..hideCurrentMaterialBanner()..showSnackBar(snackBar);
-  }
 
-}
 
 
 

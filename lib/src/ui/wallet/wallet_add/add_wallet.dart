@@ -38,6 +38,7 @@ class _WalletAddScreenState extends State<WalletAddScreen> {
     'assets/icons/006.png',
   ];
   String selectBg = 'assets/icons/002.png';
+  bool _loading = false;
   @override
   Widget build(BuildContext context) {
     double h = Utils.getHeight(context);
@@ -163,15 +164,19 @@ class _WalletAddScreenState extends State<WalletAddScreen> {
               ],
             ),
           ),
-          OnTapWidget(title: 'Hamyon qo‘shish', onTap: () async{
+          OnTapWidget(loading:_loading,title: 'Hamyon qo‘shish', onTap: () async{
+            setState(() => _loading = true);
             try{
               Repository repository = Repository();
               HttpResult response = await repository.addWallet(cardController.text, selectedValue, balansController.text.isEmpty?0:int.parse(balansController.text),selectBg);
               if(response.result["status"] == 'Ok'){
+                setState(() => _loading = false);
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
                 walletBloc.getWallet();
               }
               else{
+                setState(() => _loading = false);
                 final snackBar = SnackBar(
                   /// need to set following properties for best effect of awesome_snackbar_content
                   elevation: 0,

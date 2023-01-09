@@ -10,6 +10,8 @@ import 'package:naqsh_agent/src/theme/app_theme.dart';
 import 'package:naqsh_agent/src/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../dialog/lang/lang_dialog.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -134,7 +136,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Icons.language,
               color: AppTheme.purple,
             ),
-            onTap: () {},
+            onTap: () {
+              ShowBottomLanguageDialog.showLangDialog(context);
+            },
             title: Text('Tilni ozgartirish'),
             trailing: const Icon(
               Icons.arrow_forward_ios,

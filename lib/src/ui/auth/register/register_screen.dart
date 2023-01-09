@@ -16,13 +16,25 @@ import '../../../widget/pop/pop_widget.dart';
 
 
 // ignore: must_be_immutable
-class RegisterScreen extends StatelessWidget {
-   RegisterScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+   const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final PhoneNumberTextInputFormatter _phoneNumber = PhoneNumberTextInputFormatter();
-   bool _loading = false;
+
+   bool loading = false;
+
+
    TextEditingController nameController = TextEditingController();
+
   TextEditingController surnameController = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -135,6 +147,7 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 30*h,),
                   OnTapWidget(
+                    loading: loading,
                     title: 'Davom etish',
                     onTap: (){
                       if(nameController.text.isNotEmpty&&surnameController.text.isNotEmpty&&phoneController.text.isNotEmpty){
@@ -166,13 +179,18 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
+
   senData(String name,surname,phone ,context)async{
+    print(phone);
+    setState(() => loading = true);
      Repository _repository = Repository();
     HttpResult response = await _repository.register(name, surname, phone);
     if(response.result["status"] == 'ok'){
+      setState(() => loading = false);
       Navigator.pushNamed(context, '/verfication',arguments: phone);
     }
     else{
+      setState(() => loading = false);
       final snackBar = SnackBar(
         /// need to set following properties for best effect of awesome_snackbar_content
         elevation: 0,

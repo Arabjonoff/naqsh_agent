@@ -1,11 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:naqsh_agent/src/bloc/category/category_bloc.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
 
 import '../../bloc/agent/agent_bloc.dart';
 import '../../dialog/add_agent_type/agent_type_dialog.dart';
-import '../../dialog/add_agent_type/agent_type_list.dart';
+import '../../model/category/category_model.dart';
 import '../../model/http_result.dart';
 import '../../provider/repository.dart';
 import '../../utils/utils.dart';
@@ -30,6 +30,10 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
   TextEditingController controller = TextEditingController();
 
   var data = DateTime.now();
+  bool _loading = false;
+  bool type = false;
+  String agentType = 'Agent turi';
+  int agentId = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +127,57 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                     type: true),
                 GestureDetector(
                     onTap: () {
-                      AgentTypeListDialog.showAgentTypeListDialog(context);
+                      setState(() => type = !type);
+                      categoryBloc.getCategories();
                     },
                     child: TextFieldWidget(
                       controller: controller,
                       icon: 'assets/icons/category.svg',
-                      hint: 'Agent turi',
+                      hint: agentType,
                       enables: false,
                     )),
+                if (type)
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20 * w),
+                    width: MediaQuery.of(context).size.width,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        color: AppTheme.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: StreamBuilder<List<CategoryModel>>(
+                        stream: categoryBloc.getCategory,
+                        builder: (context, snapshot) {
+
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                      onTap: () {
+                                        agentType = snapshot.data![index].name;
+                                        agentId = snapshot.data![index].id;
+                                        setState(() => type = false);
+                                      },
+                                      title: Text(snapshot.data![index].name),
+                                      trailing: IconButton(
+                                        onPressed: () {
+                                          Repository r = Repository();
+                                          r.categoryDelete(agentId = snapshot.data![index].id);
+                                          setState(() => type = false);
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ));
+                                });
+                          }
+                          return const Center(
+                              child: CircularProgressIndicator.adaptive());
+                        }),
+                  )
+                else
+                  const SizedBox(),
                 TextFieldWidget(
                     controller: commentController,
                     icon: 'assets/icons/message.svg',
@@ -141,8 +188,10 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
           Padding(
             padding: EdgeInsets.only(bottom: 32.0 * w),
             child: OnTapWidget(
+                loading: _loading,
                 title: 'Davom etish',
                 onTap: () async {
+                  setState(() => _loading = true);
                   Repository repository = Repository();
                   HttpResult response = await repository.addClients(
                       nameController.text,
@@ -151,11 +200,49 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                       sumUzsController.text,
                       usdController.text,
                       '${data.year}/${data.month}/${data.day}',
-                      commentController.text);
+                      commentController.text,
+                    agentId,
+                  );
                   if (response.result["status"] == "ok") {
+                    setState(() => _loading = false);
                     // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
+                    final snackBar = SnackBar(
+                      /// need to set following properties for best effect of awesome_snackbar_content
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      behavior: SnackBarBehavior.floating,
+                      dismissDirection: DismissDirection.down,
+                      content: AwesomeSnackbarContent(
+                        title: "Xatolik",
+                        message: "Nimadur xato qaytadan urinib koring",
+                        contentType: ContentType.success,
+                        inMaterialBanner: false,
+                      ),
+                    );
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentMaterialBanner()
+                      ..showSnackBar(snackBar);
                     agentBloc.getClients();
+                  } else {
+                    setState(() => _loading = false);
+                    final snackBar = SnackBar(
+                      /// need to set following properties for best effect of awesome_snackbar_content
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      behavior: SnackBarBehavior.floating,
+                      dismissDirection: DismissDirection.down,
+                      content: AwesomeSnackbarContent(
+                        title: "Xatolik",
+                        message: "Nimadur xato qaytadan urinib koring",
+                        contentType: ContentType.failure,
+                        inMaterialBanner: false,
+                      ),
+                    );
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentMaterialBanner()
+                      ..showSnackBar(snackBar);
                   }
                 }),
           )

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:naqsh_agent/src/dialog/add_expense/add_expense_dialog.dart';
 import 'package:naqsh_agent/src/model/income/income_model.dart';
 import 'package:naqsh_agent/src/ui/expense/add_expense_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../bloc/expense/expense_bloc.dart';
 import '../../dialog/filter/expense/expense_filter.dart';
@@ -156,14 +157,20 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   }
 
 
-  void _getData() {
+  void _getData() async{
     DateTime now = DateTime.now();
-    var startYear = DateTime(2022,12);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int year = preferences.getInt('year')??now.year;
+    int month = preferences.getInt('month')??now.month;
+    var startYear = DateTime(year,month);
     var endYear = DateTime(now.year,now.month +1); //if you want String
     while (startYear != endYear) {
       data.add(DateTime(startYear.year,startYear.month));
       startYear = DateTime(startYear.year, startYear.month + 1, startYear.day);
     }
+    setState(() {
+
+    });
   }
 
   Widget span(String title,content){

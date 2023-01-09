@@ -6,7 +6,6 @@ import 'package:naqsh_agent/src/theme/app_theme.dart';
 import 'package:naqsh_agent/src/widget/pop/pop_widget.dart';
 
 import '../../../model/http_result.dart';
-import '../../../model/response_model.dart';
 import '../../../provider/repository.dart';
 import '../../../utils/phone_number_format.dart';
 import '../../../utils/utils.dart';
@@ -14,11 +13,21 @@ import '../../../widget/button/ontap_widget.dart';
 
 
 
-class LoginScreen extends StatelessWidget {
-   LoginScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final PhoneNumberTextInputFormatter _phoneNumber =
   PhoneNumberTextInputFormatter();
+
   TextEditingController controller = TextEditingController();
+
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     double w = Utils.getWidth(context);
@@ -134,6 +143,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 50*h,),
                     OnTapWidget(
+                      loading: loading,
                       title: 'Davom etish',
                       onTap: () => senData('+998${controller.text}', context),
                     ),
@@ -146,13 +156,17 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+
    senData(phone ,context)async{
+    setState(() => loading = true);
      Repository _repository = Repository();
      HttpResult response = await _repository.login(phone);
      if(response.result["status"] =='ok'){
+       setState(() => loading = false);
        Navigator.pushNamed(context, '/verfication',arguments: phone);
      }
      else{
+       setState(() => loading = false);
        final snackBar = SnackBar(
          /// need to set following properties for best effect of awesome_snackbar_content
          elevation: 0,
@@ -170,5 +184,4 @@ class LoginScreen extends StatelessWidget {
      }
 
    }
-
 }

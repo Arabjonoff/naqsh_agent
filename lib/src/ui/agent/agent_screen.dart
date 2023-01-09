@@ -73,6 +73,7 @@ class _AgentScreenState extends State<AgentScreen> {
                             children: [
                               span('Ismi:', data[index].name),
                               span('Tel raqam:', data[index].phone),
+                              span('Agent turi:', data[index].category.toString()),
                               span('Sana:', DateFormat('yyyy/MM/dd').format(data[index].lastOperationDate)),
                               Row(
                                 children: [

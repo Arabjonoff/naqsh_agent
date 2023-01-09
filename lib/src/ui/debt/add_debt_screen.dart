@@ -289,7 +289,7 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
                         if(int.parse(sumController.text ) < balans){
                           HttpResult result = await _repository.addOperation(
                               'chiqim',
-                              '${data.year}/${data.month}/${data.day}',
+                              '${data.year}-${data.month}-${data.day}',
                               idClient,
                               idWallet,
                               int.parse(sumController.text),
@@ -300,7 +300,7 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
                           if(result.result["status"] == 'Ok'){
                             // ignore: use_build_context_synchronously
                             Navigator.pop(context);
-                            debtBloc.getDebt(date);
+                            debtBloc.getDebt(date,'');
                           }
                           else{
                             final snackBar = SnackBar(

@@ -5,8 +5,9 @@ import 'package:naqsh_agent/src/utils/utils.dart';
 class OnTapWidget extends StatelessWidget {
   final String title;
   bool color;
+  bool loading;
   final Function() onTap;
-   OnTapWidget({Key? key, required this.title, required this.onTap,this.color = true}) : super(key: key);
+   OnTapWidget({Key? key, required this.title, required this.onTap,this.color = true,this.loading = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,9 @@ class OnTapWidget extends StatelessWidget {
         padding:  EdgeInsets.symmetric(vertical: 14*w),
         width: MediaQuery.of(context).size.width,
         child: Center(
-          child: Text(title,style:  TextStyle(fontSize: 20*w,fontWeight: FontWeight.w600,color: AppTheme.white),),
+          child:
+              loading?const CircularProgressIndicator.adaptive(backgroundColor: AppTheme.white,):
+          Text(title,style:  TextStyle(fontSize: 20*w,fontWeight: FontWeight.w600,color: AppTheme.white),),
         ),
       )),
     );

@@ -121,7 +121,7 @@ class AppProvider {
     return await _getRequest(url,);
   }
 
-  Future<HttpResult> addClients(name,surname,phone,summa_uzs,summa_usd,lastopiration_date,comment) async {
+  Future<HttpResult> addClients(name,surname,phone,summa_uzs,summa_usd,lastopiration_date,comment,id) async {
     var body = {
       "name": name,
       "surname": surname,
@@ -130,6 +130,7 @@ class AppProvider {
       "summa_usd": summa_usd,
       "lastopiration_date": lastopiration_date,
       "comment": comment,
+      "category": id,
     };
     String url = "$baseUrl/api/clients";
     return await _postRequest(url,json.encode(body));
@@ -211,8 +212,8 @@ class AppProvider {
     String url = "$baseUrl/operations?operation_type=xarajat&filter_date=$date";
     return await _getRequest(url);
   }
-  Future<HttpResult> debtAll(date) async {
-    String url = "$baseUrl/operations?operation_type=chiqim&filter_date=$date";
+  Future<HttpResult> debtAll(date,wallet) async {
+    String url = "$baseUrl/operations?operation_type=chiqim&filter_date=$date&wallet=$wallet";
     return await _getRequest(url);
   }
   Future<HttpResult> courseAdd(date,course) async {
@@ -234,6 +235,10 @@ class AppProvider {
 
   Future<HttpResult> categoryGet() async {
     String url = "$baseUrl/api/categories";
+    return await _getRequest(url);
+  }
+  Future<HttpResult> categoryDelete(id) async {
+    String url = "$baseUrl/category/$id/delete";
     return await _getRequest(url);
   }
 

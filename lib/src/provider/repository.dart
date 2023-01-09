@@ -11,7 +11,7 @@ class Repository{
   Future<HttpResult> getWallet()=> _provider.getWallet();
   Future<HttpResult> getWalletDetail(id,date)=> _provider.getWalletDetail(id,date);
   Future<HttpResult> addWallet(name, valyute, balans,bg)=> _provider.addWallet(name, valyute, balans,bg);
-  Future<HttpResult> addClients(name, phone, surname, summa_uzs, summa_usd, lastopiration_date, comment)=> _provider.addClients(name, phone, surname, summa_uzs, summa_usd, lastopiration_date, comment);
+  Future<HttpResult> addClients(name, phone, surname, summa_uzs, summa_usd, lastopiration_date, comment,id)=> _provider.addClients(name, phone, surname, summa_uzs, summa_usd, lastopiration_date, comment,id);
   Future<HttpResult> addExpense(date,walletId,summaUzs,summaUsd, cost,comment) => _provider.addExpense(date, walletId, summaUzs,summaUsd, cost, comment);
   Future<HttpResult> getClient()=> _provider.getClient();
   Future<HttpResult> clientId(id)=> _provider.clientId(id);
@@ -20,10 +20,11 @@ class Repository{
   Future<HttpResult> courseAdd(date, course)=> _provider.courseAdd(date, course);
   Future<HttpResult> categoryAdd(name)=> _provider.categoryAdd(name);
   Future<HttpResult> categoryGet()=> _provider.categoryGet();
+  Future<HttpResult> categoryDelete(id)=> _provider.categoryDelete(id);
   Future<HttpResult> addOperation(type,date,client_id,wallet_id,summa_uzs,summa_usd,which_debt,comment)=> _provider.addOperation(type,date,client_id,wallet_id,summa_uzs,summa_usd,which_debt,comment);
   Future<HttpResult> incomeAll(date,wallet)=> _provider.incomeAll(date,wallet);
   Future<HttpResult> expenseAll(date)=> _provider.expenseAll(date);
-  Future<HttpResult> debtAll(date)=> _provider.debtAll(date);
+  Future<HttpResult> debtAll(date,wallet)=> _provider.debtAll(date,wallet);
   Future<HttpResult> deleteWallet(id)=> _provider.deleteWallet(id);
   Future<HttpResult> home()=> _provider.home();
   Future<HttpResult> addCost(name)=> _provider.addCost(name);

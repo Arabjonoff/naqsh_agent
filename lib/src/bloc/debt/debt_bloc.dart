@@ -11,8 +11,8 @@ class DebtBloc{
   Stream<IncomeAllModel> get getIncom => _fetchIncome.stream;
 
 
-  getDebt(date)async{
-    HttpResult response = await _repository.debtAll(date);
+  getDebt(date,wallet)async{
+    HttpResult response = await _repository.debtAll(date,wallet);
     if(response.isSuccess){
       IncomeAllModel data = IncomeAllModel.fromJson(response.result);
       _fetchIncome.sink.add(data);

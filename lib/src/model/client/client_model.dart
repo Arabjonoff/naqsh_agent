@@ -15,6 +15,7 @@ class ClientModel {
     required this.lastOperationDate,
     required this.comment,
     required this.user,
+    required this.category,
   });
 
   int id;
@@ -26,6 +27,7 @@ class ClientModel {
   DateTime lastOperationDate;
   String comment;
   int user;
+  dynamic category;
 
   factory ClientModel.fromJson(Map<String, dynamic> json) => ClientModel(
     id: json["id"]??0,
@@ -37,5 +39,6 @@ class ClientModel {
     lastOperationDate: json["last_operation_date"] == null ? DateTime.now():DateTime.parse(json["last_operation_date"]),
     comment: json["comment"]??"",
     user: json["user"]??0,
+    category: json["category"] ?? '',
   );
 }
