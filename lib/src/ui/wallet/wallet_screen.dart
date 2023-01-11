@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:naqsh_agent/src/bloc/wallet/wallet_bloc.dart';
 import 'package:naqsh_agent/src/dialog/alert/alert_dialog.dart';
 import 'package:naqsh_agent/src/model/http_result.dart';

@@ -11,8 +11,8 @@ class ExpenseBloc{
   Stream<IncomeAllModel> get getExpense => _fetchIncome.stream;
 
 
-  getExpenses(date)async{
-    HttpResult response = await _repository.expenseAll(date);
+  getExpenses(date,wallet)async{
+    HttpResult response = await _repository.expenseAll(date,wallet);
     if(response.isSuccess){
       IncomeAllModel data = IncomeAllModel.fromJson(response.result);
       _fetchIncome.sink.add(data);

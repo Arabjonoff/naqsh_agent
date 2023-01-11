@@ -1,5 +1,7 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:naqsh_agent/src/bloc/cost/cost_bloc.dart';
+import 'package:naqsh_agent/src/bloc/expense/expense_bloc.dart';
 import 'package:naqsh_agent/src/dialog/add_expense/add_expense_dialog.dart';
 import 'package:naqsh_agent/src/dialog/loading/loading_dialog.dart';
 import 'package:naqsh_agent/src/model/http_result.dart';
@@ -31,6 +33,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   bool cost = false;
   bool success = true;
   bool warning = false;
+  bool loading = false;
   int costId = 0;
   String wallet = 'Hamyon';
   String costs = 'Xarajat turi';
@@ -207,6 +210,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 else
                   const SizedBox(),
                 TextFieldWidget(
+                  type: true,
                     controller: usdController,
                     icon: 'assets/icons/coin.svg',
                     hint: 'Summa usd'),
@@ -219,9 +223,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             ),
           ),
           OnTapWidget(
+            loading: loading,
               title: 'Qoshish',
               onTap: () async {
-                setState(() =>warning = true);
+              try{
+                setState(() =>loading = true);
                 HttpResult res = await _repository.addExpense(
                   '${data.year}-${data.month}-${data.month}',
                   idWallet,
@@ -231,11 +237,48 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   commentController.text,
                 );
                 if(res.result["status"] == 'Ok'){
-                  setState(() =>warning = false);
+                  setState(() =>loading = false);
+                  expenseBloc.getExpenses('', '');
+                  Navigator.pop(context);
                 }
                 else{
-
+                  final snackBar = SnackBar(
+                    /// need to set following properties for best effect of awesome_snackbar_content
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    behavior: SnackBarBehavior.floating,
+                    dismissDirection: DismissDirection.down,
+                    content: AwesomeSnackbarContent(
+                      title: "Xatolik",
+                      message: res.result['error_message'],
+                      contentType: ContentType.failure,
+                      inMaterialBanner: false,
+                    ),
+                  );
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context)..hideCurrentMaterialBanner()..showSnackBar(snackBar);
+                  setState(() =>loading = false);
                 }
+
+              }catch(_){
+                final snackBar = SnackBar(
+                  /// need to set following properties for best effect of awesome_snackbar_content
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  behavior: SnackBarBehavior.floating,
+                  dismissDirection: DismissDirection.down,
+                  content: AwesomeSnackbarContent(
+                    title: "Xatolik",
+                    message: "Nimadur xato qaytadan urinib koring",
+                    contentType: ContentType.failure,
+                    inMaterialBanner: false,
+                  ),
+                );
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context)..hideCurrentMaterialBanner()..showSnackBar(snackBar);
+                setState(() =>loading = false);
+              }
+
               }),
           SizedBox(
             height: 32 * h,

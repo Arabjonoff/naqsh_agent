@@ -53,7 +53,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
   int idWallet = 1;
   num res = 0;
   num summa = 0;
-  num doll = 11225;
+  num doll = 0;
   final Repository _repository = Repository();
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:naqsh_agent/src/theme/app_theme.dart';
+import 'package:naqsh_agent/src/ui/bottom_menu/bottom_menu_screen.dart';
 
 import '../../../utils/utils.dart';
 
@@ -24,9 +25,9 @@ class BannerCardWidget extends StatelessWidget {
         ),
         child: Column(
           children:  [
-            Text('$summa uzs',maxLines: 1,style: TextStyle(fontSize: 14*h,fontWeight: FontWeight.w600,color: AppTheme.white),),
+            Text('${priceFormat.format(summa)} uzs',maxLines: 1,style: TextStyle(fontSize: 14*h,fontWeight: FontWeight.w600,color: AppTheme.white),),
             SizedBox(height: 5*h,),
-            Text('$summa_usd \$',maxLines: 1,style: TextStyle(fontSize: 14*h,fontWeight: FontWeight.w600,color: AppTheme.white),),
+            Text('${priceFormat.format(summa_usd)} \$',maxLines: 1,style: TextStyle(fontSize: 14*h,fontWeight: FontWeight.w600,color: AppTheme.white),),
             SizedBox(height: 5*h,),
             Text(name,style: TextStyle(fontSize: 14*h,fontWeight: FontWeight.w400,color: AppTheme.white.withOpacity(0.7),),),
           ],

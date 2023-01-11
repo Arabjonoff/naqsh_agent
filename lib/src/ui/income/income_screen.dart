@@ -11,6 +11,7 @@ import '../../bloc/wallet/wallet_bloc.dart';
 import '../../model/wallet/wallet_model.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/utils.dart';
+import '../bottom_menu/bottom_menu_screen.dart';
 import '../wallet/wallet_add/add_wallet.dart';
 
 class IncomeScreen extends StatefulWidget {
@@ -33,8 +34,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
   var filterWallet;
   DateTime selected = DateTime.now();
   List<DateTime> listDate = [];
-  num count = 0;
-  num countUsd = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -314,10 +314,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<Datum> data = snapshot.data!.data;
-              count = 0;
+              int count = 0;
               for (int i = 0; i < data.length; i++) {
                 count += (data[i].summaUzs);
               }
+              int countUsd = 0;
               for (int i = 0; i < data.length; i++) {
                 countUsd += (data[i].summaUsd);
               }
@@ -373,7 +374,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                             width: 20 * w,
                                           ),
                                           Text(
-                                            data[index].summaUzs.toString(),
+                                            priceFormat.format(data[index].summaUzs).toString(),
                                             style: TextStyle(
                                                 fontSize: 18 * h,
                                                 fontWeight: FontWeight.w400,
@@ -397,7 +398,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                             width: 20 * w,
                                           ),
                                           Text(
-                                            data[index].summaUsd.toString(),
+                                            priceFormat.format(data[index].summaUsd).toString(),
                                             style: TextStyle(
                                                 fontSize: 18 * h,
                                                 fontWeight: FontWeight.w400,
@@ -427,12 +428,12 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('${count} Uzs',
+                                  Text('${priceFormat.format(count)} som',
                                       style: TextStyle(fontSize: 18 * h)),
                                   SizedBox(
                                     height: 5 * h,
                                   ),
-                                  Text('${count} Usd',
+                                  Text('${priceFormat.format(countUsd)} \$',
                                       style: TextStyle(fontSize: 18 * h)),
                                 ],
                               )

@@ -205,25 +205,8 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                   );
                   if (response.result["status"] == "ok") {
                     setState(() => _loading = false);
-                    // ignore: use_build_context_synchronously
-                    final snackBar = SnackBar(
-                      /// need to set following properties for best effect of awesome_snackbar_content
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      behavior: SnackBarBehavior.floating,
-                      dismissDirection: DismissDirection.down,
-                      content: AwesomeSnackbarContent(
-                        title: "Xatolik",
-                        message: "Nimadur xato qaytadan urinib koring",
-                        contentType: ContentType.success,
-                        inMaterialBanner: false,
-                      ),
-                    );
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentMaterialBanner()
-                      ..showSnackBar(snackBar);
                     agentBloc.getClients();
+                    Navigator.pop(context);
                   } else {
                     setState(() => _loading = false);
                     final snackBar = SnackBar(
@@ -240,9 +223,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                       ),
                     );
                     // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentMaterialBanner()
-                      ..showSnackBar(snackBar);
+                    ScaffoldMessenger.of(context)..hideCurrentMaterialBanner()..showSnackBar(snackBar);
                   }
                 }),
           )

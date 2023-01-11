@@ -4,9 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:naqsh_agent/src/bloc/agent/agent_bloc.dart';
 import 'package:naqsh_agent/src/model/client/client_model.dart';
 import 'package:naqsh_agent/src/ui/agent/add_agent_screen.dart';
-import '../../dialog/filter/agent/filter_dialog.dart';
+import 'package:naqsh_agent/src/ui/agent/serach_screen.dart';
+import 'package:naqsh_agent/src/widget/button/ontap_widget.dart';
+import '../../bloc/category/category_bloc.dart';
+import '../../model/category/category_model.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/utils.dart';
+import '../bottom_menu/bottom_menu_screen.dart';
 
 class AgentScreen extends StatefulWidget {
   const AgentScreen({Key? key}) : super(key: key);
@@ -16,10 +20,17 @@ class AgentScreen extends StatefulWidget {
 }
 
 class _AgentScreenState extends State<AgentScreen> {
+  int agentId = 0;
+
   @override
   void initState() {
     agentBloc.getClients();
     super.initState();
+  }
+  @override
+  void dispose() {
+    agentBloc.getClients();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -37,11 +48,70 @@ class _AgentScreenState extends State<AgentScreen> {
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20))
         ),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.search_rounded)),
           IconButton(onPressed: (){
-            FilterDialog.showFilterDilaog(context);
-          }, icon: SvgPicture.asset('assets/icons/filter.svg')),
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return SearchScreen();
+            }));
+          }, icon: const Icon(Icons.search_rounded)),
+          Builder(
+            builder: (context) => IconButton(
+              icon: SvgPicture.asset('assets/icons/filter.svg'),
+              onPressed: () {
+                categoryBloc.getCategories();
+                Scaffold.of(context).openEndDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            ),
+          ),
         ],
+      ),
+      endDrawer: Drawer(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:  [
+              Center(child: Text('Filtr',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),)),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Turi boyich',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 0 * w),
+                width: MediaQuery.of(context).size.width,
+                height: 200,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)),
+                child: StreamBuilder<List<CategoryModel>>(
+                    stream: categoryBloc.getCategory,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                  onTap: () {
+                                    agentId = snapshot.data![index].id;
+                                  },
+                                  title: Text(snapshot.data![index].name),
+                              );
+                            },);
+                      }
+                      return const Center(
+                          child: CircularProgressIndicator.adaptive());
+                    }),
+              ),
+              Spacer(),
+              Row(
+                children: [
+                  Expanded(child: OnTapWidget(title: 'Orqaga', onTap: (){
+                    Navigator.pop(context);
+                  },color: false,)),
+                  Expanded(child: OnTapWidget(title: 'Qollash', onTap: (){})),
+                ],
+              )
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -79,7 +149,7 @@ class _AgentScreenState extends State<AgentScreen> {
                                 children: [
                                   Text('Som uzs:',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),),
                                   const SizedBox(width: 20,),
-                                  Text(data[index].summaUzs.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
+                                  Text(priceFormat.format(data[index].summaUzs).toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
                                 ],
                               ),
                               const SizedBox(height: 8,),
@@ -87,7 +157,7 @@ class _AgentScreenState extends State<AgentScreen> {
                                 children: [
                                   Text('Som usd:',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,),),
                                   const SizedBox(width: 20,),
-                                  Text(data[index].summaUsd.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
+                                  Text(priceFormat.format(data[index].summaUsd).toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.green),),
                                 ],
                               ),
                             ],

@@ -35,7 +35,7 @@ class AgentTypeDialog {
                         controller: controller,
                         icon: 'assets/icons/category.svg',
                         hint: 'Turini kiriting',
-                        type: true,
+                        type: false,
                       )
                     ],
                   ),

@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:naqsh_agent/src/model/http_result.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppProvider {
+  static Duration durationTimeout = const Duration(seconds: 30);
   // String baseUrl = "http://192.168.1.141:8088";
   String baseUrl = "http://api.foodaudit.uz";
 
@@ -30,21 +33,50 @@ class AppProvider {
   /// Api requests
   Future<HttpResult> _getRequest(String url) async {
     final dynamic headers = await _headers();
-    http.Response response = await http.get(
-      Uri.parse(url),
-      headers: headers,
-    );
-    return _result(response);
+    try{
+      http.Response response = await http.get(
+          Uri.parse(url),
+          headers: headers
+      ).timeout(durationTimeout);
+      return _result(response);
+    } on TimeoutException catch(_){
+      return HttpResult(
+        isSuccess: false,
+        statusCode: -1,
+        result: "Network",
+      );
+    } on SocketException catch (_) {
+      return HttpResult(
+        isSuccess: false,
+        statusCode: -1,
+        result: "Network",
+      );
+    }
   }
 
   Future<HttpResult> _postRequest(String url, body) async {
     final dynamic headers = await _headers();
+  try{
     http.Response response = await http.post(
-      Uri.parse(url),
-      body: body,
-      headers: headers
-    );
+        Uri.parse(url),
+        body: body,
+        headers: headers
+    ).timeout(durationTimeout);
     return _result(response);
+  } on TimeoutException catch(_){
+    return HttpResult(
+      isSuccess: false,
+      statusCode: -1,
+      result: "Network",
+    );
+  } on SocketException catch (_) {
+    return HttpResult(
+      isSuccess: false,
+      statusCode: -1,
+      result: "Network",
+    );
+  }
+
   }
 
   Future<HttpResult> _deleteRequest(String url,) async {
@@ -141,6 +173,12 @@ class AppProvider {
     String url = "$baseUrl/api/clients";
     return await _getRequest(url,);
   }
+
+  Future<HttpResult> search(query) async {
+    String url = "$baseUrl/api/client/search?q=$query";
+    return await _getRequest(url,);
+  }
+
   Future<HttpResult> deleteWallet(id) async {
     String url = "$baseUrl/api/wallet/$id/delete";
     return await _deleteRequest(url,);
@@ -208,8 +246,8 @@ class AppProvider {
     String url = "$baseUrl/operations/?operation_type=kirim&filter_date=$date&wallet=$wallet";
     return await _getRequest(url);
   }
-  Future<HttpResult> expenseAll(date,) async {
-    String url = "$baseUrl/operations?operation_type=xarajat&filter_date=$date";
+  Future<HttpResult> expenseAll(date,wallet) async {
+    String url = "$baseUrl/operations?operation_type=xarajat&filter_date=$date&wallet=$wallet";
     return await _getRequest(url);
   }
   Future<HttpResult> debtAll(date,wallet) async {

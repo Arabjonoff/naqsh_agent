@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:naqsh_agent/src/dialog/add_expense/add_expense_dialog.dart';
 import 'package:naqsh_agent/src/model/income/income_model.dart';
 import 'package:naqsh_agent/src/ui/expense/add_expense_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../bloc/expense/expense_bloc.dart';
-import '../../dialog/filter/expense/expense_filter.dart';
+import '../../bloc/wallet/wallet_bloc.dart';
+import '../../model/wallet/wallet_model.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/utils.dart';
+import '../../widget/button/ontap_widget.dart';
+import '../bottom_menu/bottom_menu_screen.dart';
+import '../wallet/wallet_add/add_wallet.dart';
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({Key? key}) : super(key: key);
 
@@ -22,28 +26,37 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   void initState() {
     _getData();
-    expenseBloc.getExpenses(date);
+    expenseBloc.getExpenses(date,'');
     super.initState();
   }
   @override
   void dispose() {
-    expenseBloc.getExpenses(date);
+    expenseBloc.getExpenses(date,'');
     super.dispose();
   }
   var date = DateFormat('yyyy-MM').format(DateTime.now());
   DateTime selected = DateTime.now();
   List<DateTime> data = [];
+  var filterDate;
+  var filterWallet;
   @override
   Widget build(BuildContext context) {
     double h = Utils.getHeight(context);
     double w = Utils.getWidth(context);
     return Scaffold(
-      backgroundColor: AppTheme.expense,
+      backgroundColor: AppTheme.background,
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: (){
-            ExpenseFilterDialog.showExpenseFilterDilaog(context);
-          }, icon: SvgPicture.asset('assets/icons/filter.svg')),
+          Builder(
+            builder: (context) => IconButton(
+              icon: SvgPicture.asset('assets/icons/filter.svg'),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+                walletBloc.getWallet();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            ),
+          ),
         ],
         elevation: 5,
         foregroundColor: AppTheme.black24,
@@ -64,7 +77,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                       setState(() {
                         selected = data[index];
                         date = data[index].toString();
-                        expenseBloc.getExpenses(date);
+                        expenseBloc.getExpenses(date,'');
                       });
                     },
                     child: Container(
@@ -95,7 +108,201 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 }),
           ),
         ),
-
+      ),
+      endDrawer: Drawer(
+        child: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    children: [
+                      Center(
+                          child: Text(
+                            'Filtr',
+                            style: TextStyle(
+                                fontSize: 20 * h, fontWeight: FontWeight.w600),
+                          )),
+                      SizedBox(
+                        height: 16 * h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0 * w, vertical: 10 * h),
+                        child: Text(
+                          'Hamyon boyicha ',
+                          style: TextStyle(
+                              fontSize: 16 * h, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 100,
+                        child: StreamBuilder<List<WalletModel>>(
+                            stream: walletBloc.getWalletInfo,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                List<WalletModel> data = snapshot.data!;
+                                return data.isNotEmpty
+                                    ? PageView.builder(
+                                    itemCount: data.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() =>
+                                          filterWallet = data[index].id);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16 * w),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 16 * w),
+                                          height: 100 * h,
+                                          width:
+                                          MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                              border: filterWallet ==
+                                                  data[index].id
+                                                  ? Border.all(
+                                                  color: AppTheme.purple,
+                                                  width: 3)
+                                                  : Border(),
+                                              borderRadius:
+                                              BorderRadius.circular(10),
+                                              color: Colors.blue,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: data[index].bg == ""
+                                                      ? const AssetImage(
+                                                    'assets/icons/006.png',
+                                                  )
+                                                      : AssetImage(
+                                                    data[index].bg,
+                                                  ))),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 16 * h,
+                                              ),
+                                              Text(
+                                                data[index].name,
+                                                style: TextStyle(
+                                                    fontSize: 19 * h,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.white),
+                                              ),
+                                              SizedBox(
+                                                height: 5 * h,
+                                              ),
+                                              Text(
+                                                'Balans',
+                                                style: TextStyle(
+                                                    fontSize: 15 * h,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white),
+                                              ),
+                                              SizedBox(
+                                                height: 5 * h,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      data[index]
+                                                          .balans
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 21 * h,
+                                                          fontWeight:
+                                                          FontWeight.w700,
+                                                          color: Colors.white)),
+                                                  Text(data[index].valyuteType,
+                                                      style: TextStyle(
+                                                          fontSize: 17 * h,
+                                                          fontWeight:
+                                                          FontWeight.w500,
+                                                          color: Colors.white)),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    })
+                                    : Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20 * w),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 100 * h,
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.purple,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Center(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                                  return WalletAddScreen();
+                                                }));
+                                      },
+                                      child: Text(
+                                        '+ Hanyon qo\'shish',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              );
+                            }),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0 * w, vertical: 10 * h),
+                        child: Text(
+                          'Sana boyicha ',
+                          style: TextStyle(
+                              fontSize: 16 * h, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: SfDateRangePicker(
+                          selectionColor: AppTheme.black24,
+                          onSelectionChanged:
+                              (DateRangePickerSelectionChangedArgs args) {
+                            setState(() => filterDate = args.value);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(child: OnTapWidget(title: 'Orqaga', onTap: () =>Navigator.pop(context),color: false,)),
+                    Expanded(
+                      child: OnTapWidget(
+                        title: 'Qollash',
+                        onTap: () {
+                          expenseBloc.getExpenses(filterDate, filterWallet);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            )),
       ),
       body: Column(
         children: [
@@ -125,7 +332,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                           ),
                           child: Column(
                             children: [
-                              span('Ismi:', data[index].client),
                               span('Hamyon nomi:', data[index].wallet.name),
                               span('Sana:', DateFormat('yyyy-MM-dd').format(data[index].date)),
                               span('Valyuta:', data[index].valyuteType),
@@ -133,7 +339,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                                 children: [
                                   Text('Naqd:',style:  TextStyle(fontSize: 18*w,fontWeight: FontWeight.w500,),),
                                   SizedBox(width: 20*w,),
-                                  Text(data[index].summaUzs.toString(),style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w400,color: Colors.green),),
+                                  Text(priceFormat.format(data[index].summaUzs).toString(),style: TextStyle(fontSize: 18*w,fontWeight: FontWeight.w400,color: Colors.green),),
                                 ],
                               )
                             ],

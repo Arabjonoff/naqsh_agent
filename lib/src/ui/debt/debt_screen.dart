@@ -4,14 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:naqsh_agent/src/bloc/debt/debt_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../bloc/income/income_bloc.dart';
 import '../../bloc/wallet/wallet_bloc.dart';
-import '../../dialog/filter/debt/debt_filter.dart';
 import '../../model/income/income_model.dart';
 import '../../model/wallet/wallet_model.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/utils.dart';
 import '../../widget/button/ontap_widget.dart';
+import '../bottom_menu/bottom_menu_screen.dart';
 import '../wallet/wallet_add/add_wallet.dart';
 
 class DebtScreen extends StatefulWidget {
@@ -28,6 +27,12 @@ class _DebtScreenState extends State<DebtScreen> {
     _getData();
     super.initState();
   }
+  @override
+  void dispose() {
+    debtBloc.getDebt(date,'');
+    _getData();
+    super.dispose();
+  }
   var date = DateFormat('yyyy-MM').format(DateTime.now());
   DateTime selected = DateTime.now();
   List<DateTime> data = [];
@@ -40,7 +45,7 @@ class _DebtScreenState extends State<DebtScreen> {
     double h = Utils.getHeight(context);
     double w = Utils.getWidth(context);
     return Scaffold(
-      backgroundColor: AppTheme.debt,
+      backgroundColor: AppTheme.background,
       appBar: AppBar(
         actions: [
           Builder(
@@ -340,7 +345,7 @@ class _DebtScreenState extends State<DebtScreen> {
                           ),
                           child: Column(
                             children: [
-                              span('Ismi:', 'Jorch Burch'),
+                              span('Ismi:', data[index].client),
                               span('Hamyon nomi:', data[index].wallet.name),
                               span('Sana:', DateFormat('yyyy-MM-dd').format(data[index].date)),
                               span('Valyuta:', data[index].wallet.valyuteType),
@@ -357,7 +362,7 @@ class _DebtScreenState extends State<DebtScreen> {
                                     width: 20*w,
                                   ),
                                   Text(
-                                    data[index].summaUzs.toString(),
+                                    priceFormat.format(data[index].summaUzs).toString(),
                                     style: TextStyle(
                                         fontSize: 18*h,
                                         fontWeight: FontWeight.w400,
